@@ -1,6 +1,6 @@
 import React, {useMemo, useState}from 'react'
 import { assets, facilityIcons } from '../assets/assets'
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import StarRating from '../components/StarRating';
 import { useAppContext } from '../context/AppContext';
  

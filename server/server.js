@@ -15,27 +15,14 @@ connectDB()
 connectCloudinary()
 
 const app = express()
-
-// CORS configuration with YOUR CORRECT URLs
-const corsOptions = {
-  origin: [
-    'https://quickstay-beryl.vercel.app', // Your correct frontend URL
-    'http://localhost:3000', // For local development
-    'http://localhost:3001', // Alternative local port
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-clerk-auth-token'],
-};
-
-app.use(cors(corsOptions));
-
+app.use(cors()) // Enable cross Origin resource sharing
+ 
 // Middleware
 app.use(express.json())
 app.use(clerkMiddleware())
 
 // API to listen clerk webhook  
-app.use("/api/clerk", clerkWebhooks)
+app.use("/api/clerk", clerkWebhooks);
 
 app.get('/', (req, res) => res.send("API is working Fine"))
 app.use('/api/user', userRouter)
