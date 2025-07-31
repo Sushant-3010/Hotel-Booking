@@ -11,7 +11,7 @@ const MyBookings = () => {
 
     const[bookings, setBookings] = useState([]);
 
-    const fetchUserBookings = async () => {
+    const fetchUserBookings = async ()=>{
         try {
             const {data} =await axios.get('/api/bookings/user',{headers:{Authorization:`Bearer ${await getToken()}`}})
 

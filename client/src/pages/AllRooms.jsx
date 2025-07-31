@@ -76,7 +76,7 @@ const AllRooms = () => {
 
     //Function to cgeck if a room matches the selected room types
 
-    const  matchesRoomType =(room)=>{
+    const  matchesRoomType = (room)=>{
        return selectedFilters.roomType.length === 0 || selectedFilters.roomType.includes(room.roomType);
     }
     //function to check if a room matches the selected price ranges 
@@ -176,7 +176,8 @@ const AllRooms = () => {
             <div className='text-xs cursor-pointer'>
               <span onClick={()=> setOpenFilters(!openFilters)} className='lg:hidden'>
                 {openFilters ? 'HIDE':'SHOW'}</span>
-              <span className='hidden lg:block'>CLEAR</span>
+              <span onClick={clearFilters} className='hidden lg:block cursor-pointer text-blue-500 hover:underline'>CLEAR</span>
+
             </div>
           </div>
 

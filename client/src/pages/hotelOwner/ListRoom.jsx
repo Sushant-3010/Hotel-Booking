@@ -29,7 +29,7 @@ const fetchRooms =async () => {
 }
 
 //Togggle availability of the room 
-const toggleAvailability = async (roomId) => {
+const toggleAvailability = async (roomId)=>{
   const{data} =await axios.post('/api/rooms/toggle-availability',{roomId},{
   headers: { Authorization: `Bearer ${await getToken()}` }
 })

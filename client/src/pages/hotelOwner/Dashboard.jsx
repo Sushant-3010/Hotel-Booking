@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Title from '../../components/Title'
 import { assets} from '../../assets/assets'
 import { useAppContext } from '../../context/AppContext'
-import axios from 'axios'
-import toast from 'react-hot-toast'
+
 
 const Dashboard = () => {
  
              
-        const{ currency,user,getToken,toast,axios}=  useAppContext();
+        const{ currency,user,getToken,toast,axios} = useAppContext();
 
          const[dashboardData,setDashboardData]= useState({
 
@@ -25,7 +24,7 @@ const Dashboard = () => {
                     setDashboardData(data.dashboardData)
                 }
                 else{
-                    toast.error(data.message)
+                     toast.error(data.message)
                 }
             } catch (error) {
                 toast.error(error.message)
@@ -61,7 +60,7 @@ const Dashboard = () => {
             <img src={assets.totalRevenueIcon} alt=""  className='max-sm:hidden h-10'/>
             <div className='flex flex-col sm:ml-4 font-medium'>
                 <p className='text-blue-500 text-lg'>Total Revenue</p>
-                <p className='text-neutral-400 text-base'>{currency}{dashboardData. totalRevenue}</p>
+                <p className='text-neutral-400 text-base'>{currency}{dashboardData.totalRevenue}</p>
             </div>
 
         </div>
@@ -75,13 +74,13 @@ const Dashboard = () => {
             <table className='w-full'>
             <thead className='bg-gray-50'>
                 <tr>
-                    <th className='px-3 px-4 text-gray-800 font-medium'>User Name</th>
+                    <th className=' px-4 text-gray-800 font-medium'>User Name</th>
 
-                     <th className='px-3 px-4 text-gray-800 font-medium max-sm:hidden'>Room Name</th>
+                     <th className=' px-4 text-gray-800 font-medium max-sm:hidden'>Room Name</th>
 
-                      <th className='px-3 px-4 text-gray-800 font-medium text-center'>Total Amount</th>
+                      <th className='px-4 text-gray-800 font-medium text-center'>Total Amount</th>
 
-                       <th className='px-3 px-4 text-gray-800 font-medium text-center'>Payment Status</th>
+                       <th className=' px-4 text-gray-800 font-medium text-center'>Payment Status</th>
                 </tr>
 
             </thead>

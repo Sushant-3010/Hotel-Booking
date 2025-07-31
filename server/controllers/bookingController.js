@@ -10,19 +10,16 @@ const checkAvailability = async ({ checkInDate, checkOutDate, room }) => {
   try {
     const bookings = await Booking.find({
       room,
-      $or: [
-        {
-          checkInDate: { $lt: checkOutDate },
-          checkOutDate: { $gt: checkInDate }
-        }
-      ]
+      checkInDate: {$lte: checkOutDate},
+      checkOutDate: {$gte: checkInDate},
+          
     });
 
     const isAvailable = bookings.length === 0;
     return isAvailable;
   } catch (error) {
-    console.log(error.message);
-    return false;
+    console.error(error.message);
+    
   }
 };
 
@@ -36,7 +33,7 @@ export const checkAvailabilityAPI=async (req,res) => {
         const isAvailable=await checkAvailability({checkInDate,checkOutDate,room});
         res.json({success:true , isAvailable})
     } catch (error) {
-        res.json({success:false , message:'error.message'})
+        res.json({success:false , message:error.message})
         
     }
     
@@ -70,7 +67,7 @@ export const createBooking = async (req,res) => {
         const checkIn = new Date(checkInDate)
          const checkOut = new Date(checkOutDate)
 
-         const timeDiff = checkOut.getTime() -checkIn.getTime();
+         const timeDiff = checkOut.getTime() - checkIn.getTime();
 
 
         const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -119,7 +116,7 @@ export const createBooking = async (req,res) => {
     } catch (error) {
         console.log(error);
 
-        res.json({success:false, message:"Failed to created booking"})
+        res.json({success:false, message:"Failed to create booking"})
         
     }
 };
@@ -142,12 +139,14 @@ export const getHotelBookings=async (req,res) => {
    
    try {
     const hotel = await Hotel.findOne({owner:req.auth.userId});
-   if(!Hotel){
+   if(!hotel){
     return   res.json({success:false, message:" No Hotel found "})
    }
-    const bookings= await  Booking.find({hotel:hotel._id}).populate('room hotel user').sort({createdAt: -1})
+    const bookings= await  Booking.find({hotel:hotel._id}).populate('room hotel user').sort({createdAt: -1});
+
     //Total Bookings 
      const totalBookings= bookings.length;
+
      //Total Revenue 
      const totalRevenue =bookings.reduce((acc,booking)=>acc + booking.totalPrice,0)
       res.json({success:true,  dashboardData: {totalBookings,totalRevenue,bookings}})

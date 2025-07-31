@@ -1,4 +1,4 @@
-// GET Api user
+// GET /Api /user
 export const getUserData = async (req,res)=>{
     try {
         const role=req.user.role;
@@ -27,9 +27,9 @@ export const storeRecentSearchedCities = async (req,res) => {
         }
 
         await user.save();
-        res.json({success:true,message: error.message})
+        res.json({success:true,message:"City added" })
     } catch (error) {
-        res.json({success:false,message:"C"})
+        res.json({success:false,message:error.message})
     }
     
 };

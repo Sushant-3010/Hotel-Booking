@@ -21,9 +21,9 @@ export const AppProvider = ({children})=>{
         const [searchedCities,setSearchedCities]= useState([])
          const [rooms,setRooms]= useState([])
 
-        const fetchRooms=async () => {
+        const fetchRooms=async()=>{
             try {
-                const {data} =await axios.get('/api/rooms')
+                const {data} = await axios.get('/api/rooms')
                 if(data.success){
                     setRooms(data.rooms)
                 }else{
@@ -35,7 +35,7 @@ export const AppProvider = ({children})=>{
         }
 
 
-        const fetchUser =async ( ) => {
+        const fetchUser =async ()=>{
             try {
              const {data} =  await axios.get('/api/user',{headers:{Authorization:`Bearer ${await getToken()}`}})
              if (data.success) {
@@ -44,7 +44,7 @@ export const AppProvider = ({children})=>{
 
              }
              else{
-                setTimeout(() => {
+                setTimeout(()=>{
                     fetchUser()
                 },  5000);
              }
