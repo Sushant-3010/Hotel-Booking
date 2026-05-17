@@ -31,7 +31,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Middleware
-app.use(express.json())
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}))
 app.use(clerkMiddleware())
 
 // API to listen clerk webhook  

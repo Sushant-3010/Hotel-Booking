@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Title from '../../components/Title'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
@@ -10,7 +10,7 @@ const {axios,getToken,user,currency} =useAppContext()
 
 //fetch rooms for hotel owners
 
-const fetchRooms =async () => {
+const fetchRooms = useCallback(async () => {
   try {
     const {data} = await axios.get('/api/rooms/owner',{
   headers: { Authorization: `Bearer ${await getToken()}` }
@@ -26,7 +26,7 @@ const fetchRooms =async () => {
       toast.error(error.message)
   }
   
-}
+}, [axios, getToken])
 
 //Togggle availability of the room 
 const toggleAvailability = async (roomId)=>{
@@ -47,7 +47,7 @@ useEffect(()=>{
 if (user ) {
   fetchRooms()
 } 
-},[user])
+},[user, fetchRooms])
 
   return (
     <div>

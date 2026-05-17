@@ -8,13 +8,12 @@ const  RecomendedHotels = () => {
   const{rooms, searchedCities}=useAppContext();
   const [recomended,setRecomended]= useState([]);
 
-  const filterHotels = ()=>{
-      const filteredHotels = rooms.slice().filter( room=>searchedCities.includes(room.hotel.city));
-      setRecomended(filteredHotels)
-  }
-
   useEffect(()=>{
-        filterHotels()
+    const filterHotels = ()=>{
+        const filteredHotels = rooms.slice().filter( room=>searchedCities.includes(room.hotel.city));
+        setRecomended(filteredHotels)
+    }
+    filterHotels()
   },[rooms,searchedCities])
   
   return recomended.length > 0 && (

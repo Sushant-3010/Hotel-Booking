@@ -182,7 +182,7 @@ export const stripePayment = async (req,res) => {
         const session = await stripeInstance.checkout.sessions.create({
             line_items,
             mode:"payment",
-            success_url: `${origin}/loader/my-bookings`,
+            success_url: `${origin}/loader/my-bookings?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/my-bookings`,
             metadata:{
                 bookingId,
@@ -191,6 +191,33 @@ export const stripePayment = async (req,res) => {
         res.json({success:true,url:session.url})
     } catch (error) {
          res.json({success:false,message:"Payment Failed"})
+    }
+}
+
+export const verifyStripePayment = async (req,res) => {
+    try {
+        const { session_id } = req.body;
+        if (!session_id) {
+            return res.json({ success: false, message: "Session ID is required" });
+        }
+
+        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
+        const session = await stripeInstance.checkout.sessions.retrieve(session_id);
+
+        if (session.payment_status === "paid") {
+            const bookingId = session.metadata.bookingId;
+            const booking = await Booking.findById(bookingId);
+            if (booking) {
+                booking.isPaid = true;
+                booking.paymentMethod = "Stripe";
+                await booking.save();
+                return res.json({ success: true, message: "Payment verified successfully" });
+            }
+        }
+        res.json({ success: false, message: "Payment not verified" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Verification failed" });
     }
 }
 

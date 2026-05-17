@@ -22,7 +22,11 @@ app.use(cors()) // Enable cross Origin resource sharing
 app.post('/api/stripe',express.raw({type:"application/json"}),stripeWebhooks)
  
 // Middleware
-app.use(express.json())
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}))
 app.use(clerkMiddleware())
 
 // API to listen clerk webhook  

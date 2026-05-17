@@ -74,44 +74,41 @@ const AllRooms = () => {
         setSelectedSort(sortOption);
     }
 
-    //Function to cgeck if a room matches the selected room types
-
-    const  matchesRoomType = (room)=>{
-       return selectedFilters.roomType.length === 0 || selectedFilters.roomType.includes(room.roomType);
-    }
-    //function to check if a room matches the selected price ranges 
-    const matchesPriceRange =(room)=>{
-        return selectedFilters.priceRange.length === 0 || selectedFilters.priceRange.some(range=>{
-          const [min, max] = range.split('-').map(Number);
-
-          return room.pricePerNight >= min &&  room.pricePerNight <= max;
-        })
-    }
-
-    //Function to sort rooms based on the selected sort option 
-    const sortRooms=(a,b)=>{
-      if (selectedSort === 'Price: Low to High') {
-        return a.pricePerNight - b.pricePerNight;
-      }
-      if(selectedSort === 'Price: High to Low'){
-        return b.pricePerNight - a.pricePerNight;
-      }
-      if (selectedSort === 'Newest First') {
-        return new Date(b.createdAt) - new Date(a.createdAt)
-      }
-      return 0;
-    }
- 
-    //Filter Destination 
-    const filterDestination = (room) => {
-      const destination= searchParams.get('destination');
-      if(!destination) return true;
-      return room.hotel.city.toLowerCase().includes(destination.toLowerCase())
-    }
-
     //Filter and sort rooms based on the selected filters and sort option 
 
       const filteredRooms = useMemo(()=>{
+        // Function to check if a room matches the selected room types
+        const matchesRoomType = (room)=>{
+           return selectedFilters.roomType.length === 0 || selectedFilters.roomType.includes(room.roomType);
+        }
+        // function to check if a room matches the selected price ranges 
+        const matchesPriceRange =(room)=>{
+            return selectedFilters.priceRange.length === 0 || selectedFilters.priceRange.some(range=>{
+              const [min, max] = range.split('-').map(Number);
+
+              return room.pricePerNight >= min &&  room.pricePerNight <= max;
+            })
+        }
+        // Function to sort rooms based on the selected sort option 
+        const sortRooms=(a,b)=>{
+          if (selectedSort === 'Price: Low to High') {
+            return a.pricePerNight - b.pricePerNight;
+          }
+          if(selectedSort === 'Price: High to Low'){
+            return b.pricePerNight - a.pricePerNight;
+          }
+          if (selectedSort === 'Newest First') {
+            return new Date(b.createdAt) - new Date(a.createdAt)
+          }
+          return 0;
+        }
+        // Filter Destination 
+        const filterDestination = (room) => {
+          const destination= searchParams.get('destination');
+          if(!destination) return true;
+          return room.hotel.city.toLowerCase().includes(destination.toLowerCase())
+        }
+
         return rooms.filter(room => matchesRoomType(room) && matchesPriceRange(room) && filterDestination(room)).sort(sortRooms);
       },[rooms,selectedFilters,selectedSort,searchParams])
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import Title from '../components/Title'
 import { assets } from '../assets/assets'
@@ -11,7 +11,7 @@ const MyBookings = () => {
 
     const[bookings, setBookings] = useState([]);
 
-    const fetchUserBookings = async ()=>{
+    const fetchUserBookings = useCallback(async ()=>{
         try {
             const {data} =await axios.get('/api/bookings/user',{headers:{Authorization:`Bearer ${await getToken()}`}})
 
@@ -25,7 +25,8 @@ const MyBookings = () => {
              toast.error(error.message)
         }
         
-    }
+    }, [axios, getToken])
+
     const handlePayment = async (bookingId) => {
         try {
             const {data} = await axios.post('/api/bookings/stripe-payment',{bookingId},{headers:{Authorization:`Bearer ${await getToken()}`}})
@@ -45,7 +46,7 @@ const MyBookings = () => {
         if(user){
             fetchUserBookings()
         }
-    },[user])
+    },[user, fetchUserBookings])
 
   return (
     <div className='py-28 md:pb-35 md:pt-32 px-4 md:px-16 lg:px-24 xl:px-32'>
@@ -67,15 +68,15 @@ const MyBookings = () => {
 
                     {/* HotelDetails */}
                     <div className='flex flex-col md:flex-row'>
-                    <img src={booking.room.images[0]} alt="hotel-img" className='min-md:w-44 rounded shadow object-cover' />
+                    <img src={booking.room?.images?.[0] || assets.roomImg1} alt="hotel-img" className='min-md:w-44 rounded shadow object-cover' />
 
                     <div className='flex flex-col gap-1.5 max-md:mt-3 min-md:ml-4'>
-                        <p className='font-playfair text-2xl'>{booking.hotel.name}
-                        <span className='font-inter text-sm'> ({booking.room.roomType})</span>
+                        <p className='font-playfair text-2xl'>{booking.hotel?.name || 'Deleted Hotel'}
+                        <span className='font-inter text-sm'> ({booking.room?.roomType || 'Deleted Room'})</span>
                         </p>
                         <div className='flex items-center gap-1 text-sm text-gray-500'>
                              <img src={ assets.locationIcon} alt=" Location-Icon"  />
-                             <span>{booking.hotel.address }</span>
+                             <span>{booking.hotel?.address || 'N/A'}</span>
                         </div>
                         <div className='flex items-center gap-1 text-sm text-gray-500'>
                              <img src={ assets.guestsIcon} alt="  guests-Icon"  />

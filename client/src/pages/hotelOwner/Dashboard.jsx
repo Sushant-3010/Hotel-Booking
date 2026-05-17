@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Title from '../../components/Title'
 import { assets} from '../../assets/assets'
 import { useAppContext } from '../../context/AppContext'
@@ -16,7 +16,7 @@ const Dashboard = () => {
         totalRevenue:0,
         
     })
-        const fetchDashboardData= async () => {
+        const fetchDashboardData= useCallback(async () => {
             try {
                 const {data} =await axios.get('/api/bookings/hotel',{headers:{Authorization: `Bearer ${await getToken()}`}})
 
@@ -30,12 +30,13 @@ const Dashboard = () => {
                 toast.error(error.message)
             }
             
-        }
+        }, [axios, getToken, toast])
+
         useEffect(()=>{
             if(user){
                 fetchDashboardData();
             }
-        },[user])
+        },[user, fetchDashboardData])
 
   return (
     <div>
@@ -89,10 +90,10 @@ const Dashboard = () => {
                 {dashboardData.bookings.map((item,index)=>(
                     <tr key={index}>
                         <td className='py-3  px-4 text-gray-700 border-t border-gray-300'>
-                            {item.user.username}
+                            {item.user?.username || 'Deleted User'}
                         </td>
                         <td className='py-3  px-4 text-gray-700 border-t border-gray-300 max-sm:hidden'>
-                            {item.room.roomType}
+                            {item.room?.roomType || 'Deleted Room'}
                         </td>
 
                         <td className='py-3  px-4 text-gray-700 border-t border-gray-300 text-center '>

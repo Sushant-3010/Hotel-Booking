@@ -17,7 +17,8 @@ try {
 
     //verifying headers 
 
-    await whook.verify(JSON.stringify(req.body),headers)
+    const rawBody = req.rawBody ? req.rawBody.toString('utf8') : JSON.stringify(req.body);
+    await whook.verify(rawBody,headers)
 
     //getting data from request body
 

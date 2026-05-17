@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 const RoomDetails = () => {
 
     const {id}= useParams();
-    const{rooms,getToken,axios,navigate}=useAppContext()
+    const{rooms,getToken,axios,navigate,user}=useAppContext()
     const[room,setRoom]= useState(null);
     const[mainImage,setMainImage]= useState(null);
     const [checkInDate,setCheckInDate] = useState(null);
@@ -46,6 +46,10 @@ const RoomDetails = () => {
     const onSubmitHandler = async (e) => {
         try {
             e.preventDefault();
+            if (!user) {
+                toast.error('Kindly login first and then try to book!')
+                return;
+            }
             if (!isAvailable) {
                 return checkAvailability();
             } else {
@@ -66,8 +70,8 @@ const RoomDetails = () => {
     useEffect(()=>{
       const room=  rooms.find(room => room._id === id) 
       room && setRoom(room)
-        room && setMainImage(room.images[0])
-    },[rooms])
+      room && setMainImage(room.images[0])
+    },[rooms, id])
 
   return room && (
     <div className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32'>
